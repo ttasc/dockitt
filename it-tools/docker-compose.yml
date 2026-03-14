@@ -1,0 +1,12 @@
+services:
+  it-tools:
+    image: 'corentinth/it-tools:latest'
+    container_name: it-tools
+    restart: unless-stopped
+    networks:
+      dockitt_network:
+        ipv4_address: 10.0.0.11
+
+networks:
+  dockitt_network:
+    external: true

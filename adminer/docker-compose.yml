@@ -1,0 +1,12 @@
+services:
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    restart: unless-stopped
+    networks:
+      dockitt_network:
+        ipv4_address: 10.0.0.50
+
+networks:
+  dockitt_network:
+    external: true

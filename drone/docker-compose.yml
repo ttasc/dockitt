@@ -1,0 +1,51 @@
+services:
+  drone-server:
+    image: drone/drone:2
+    container_name: drone-server
+    restart: unless-stopped
+
+    environment:
+      - DRONE_GITEA_SERVER=http://git.dockitt.local
+      - DRONE_GITEA_CLIENT_ID=99fd11a1-3945-41d1-9947-3d3586fa5f28
+      - DRONE_GITEA_CLIENT_SECRET=gto_7okxzb2esitohmi5nplx5shlr3quwpezcsvbpxsmewbal5ojjwga
+      - DRONE_RPC_SECRET=mot_chuoi_bi_mat_bat_ky_cho_rpc_123 # Sinh một chuỗi ngẫu nhiên
+      - DRONE_SERVER_HOST=ci.dockitt.local
+      - DRONE_SERVER_PROTO=http
+
+    dns:
+      - 10.0.0.5
+
+    volumes:
+      - ./data/drone-data:/data
+
+    networks:
+      dockitt_network:
+        ipv4_address: 10.0.0.30
+
+  drone-runner:
+    image: drone/drone-runner-docker:1
+    container_name: drone-runner
+    restart: unless-stopped
+
+    depends_on:
+      - drone-server
+
+    environment:
+      - DRONE_RPC_PROTO=http
+      - DRONE_RPC_HOST=drone-server
+      - DRONE_RPC_SECRET=mot_chuoi_bi_mat_bat_ky_cho_rpc_123 # Phải khớp với chuỗi ở trên
+      - DRONE_RUNNER_CAPACITY=2
+      - DRONE_RUNNER_NAME=dockitt-arch-runner
+      - DRONE_RUNNER_NETWORKS=dockitt_network
+
+    volumes:
+      # Map docker socket để Runner có thể gọi Docker host chạy lệnh build container
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    networks:
+      dockitt_network:
+        ipv4_address: 10.0.0.31
+
+networks:
+  dockitt_network:
+    external: true

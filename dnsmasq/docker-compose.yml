@@ -1,0 +1,20 @@
+services:
+  dnsmasq:
+    image: alpine:latest
+    container_name: dnsmasq
+    command: sh -c "apk add --no-cache dnsmasq && dnsmasq -k -C /etc/dnsmasq.conf"
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      - ./dnsmasq.conf:/etc/dnsmasq.conf:ro
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    networks:
+      dockitt_network:
+        ipv4_address: 10.0.0.5
+
+networks:
+  dockitt_network:
+    external: true
