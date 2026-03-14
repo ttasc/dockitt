@@ -3,21 +3,18 @@ services:
     image: lscr.io/linuxserver/mariadb:latest
     container_name: bookstack-db
     restart: unless-stopped
-
     environment:
-      - PUID=1000
-      - PGID=1000
-      - MYSQL_ROOT_PASSWORD=bookstack_root_secret
-      - MYSQL_DATABASE=bookstackapp
-      - MYSQL_USER=bookstack
-      - MYSQL_PASSWORD=bookstack_secret_password
-
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - ./data/db-data:/config
-
     networks:
       dockitt_network:
-        ipv4_address: 10.0.0.40
+        ipv4_address: ${DB_STATIC_IP}
 
   bookstack:
     image: lscr.io/linuxserver/bookstack:latest
@@ -25,24 +22,21 @@ services:
     restart: unless-stopped
     depends_on:
       - bookstack-db
-
     environment:
-      - PUID=1000
-      - PGID=1000
-      - APP_KEY=base64:YZ4C6APWGy1e6+Iyq1dgaNDxvz3+ZCmYR4f0fnmkk68=
-      - APP_URL=http://docs.dockitt.local
-      - DB_HOST=10.0.0.40
-      - DB_PORT=3306
-      - DB_DATABASE=bookstackapp
-      - DB_USERNAME=bookstack
-      - DB_PASSWORD=bookstack_secret_password
-
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - APP_KEY=${APP_KEY}
+      - APP_URL=${APP_URL}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${MYSQL_DATABASE}
+      - DB_USERNAME=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - ./data/app-data:/config
-
     networks:
       dockitt_network:
-        ipv4_address: 10.0.0.41
+        ipv4_address: ${APP_STATIC_IP}
 
 networks:
   dockitt_network:

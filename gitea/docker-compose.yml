@@ -4,14 +4,14 @@ services:
     container_name: gitea-db
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=gitea
-      - POSTGRES_PASSWORD=gitea_secret_password
-      - POSTGRES_DB=gitea
+      - POSTGRES_USER=${GITEA_DB_USER}
+      - POSTGRES_PASSWORD=${GITEA_DB_PASSWORD}
+      - POSTGRES_DB=${GITEA_DB_NAME}
     volumes:
       - ./data/db-data:/var/lib/postgresql/data
     networks:
       dockitt_network:
-        ipv4_address: 10.0.0.20
+        ipv4_address: ${GITEA_DB_IP}
 
   gitea:
     image: gitea/gitea:latest
@@ -19,30 +19,26 @@ services:
     restart: unless-stopped
     depends_on:
       - gitea-db
-
     environment:
-      - USER_UID=1000
-      - USER_GID=1000
+      - USER_UID=${GITEA_USER_UID}
+      - USER_GID=${GITEA_USER_GID}
       - GITEA__database__DB_TYPE=postgres
-      - GITEA__database__HOST=10.0.0.20:5432
-      - GITEA__database__NAME=gitea
-      - GITEA__database__USER=gitea
-      - GITEA__database__PASSWD=gitea_secret_password
-      - GITEA__server__DOMAIN=git.dockitt.local
-      - GITEA__server__ROOT_URL=http://git.dockitt.local/
+      - GITEA__database__HOST=${GITEA_DB_IP}:5432
+      - GITEA__database__NAME=${GITEA_DB_NAME}
+      - GITEA__database__USER=${GITEA_DB_USER}
+      - GITEA__database__PASSWD=${GITEA_DB_PASSWORD}
+      - GITEA__server__DOMAIN=${GITEA_DOMAIN}
+      - GITEA__server__ROOT_URL=${GITEA_ROOT_URL}
       - GITEA__webhook__ALLOWED_HOST_LIST=*
-
     dns:
-      - 10.0.0.5
-
+      - ${DNS_SERVER}
     volumes:
       - ./data/gitea-data:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-
     networks:
       dockitt_network:
-        ipv4_address: 10.0.0.21
+        ipv4_address: ${GITEA_APP_IP}
 
 networks:
   dockitt_network:
