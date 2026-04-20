@@ -27,8 +27,8 @@
 *   **Tiện ích:** IT-Tools.
 
 ## 1. YÊU CẦU MÔI TRƯỜNG & CHUẨN BỊ
-*   **Hệ điều hành Server:** Lõi Linux (Môi trường phát triển: Arch Linux).
-*   **Phần mềm yêu cầu:** `docker`, `docker compose`, `openssl` (để sinh chuỗi mã hóa), `bash`.
+*   **Hệ điều hành Server:** Lõi Linux (Khuyến nghị: Debian server).
+*   **Phần mềm yêu cầu:** `docker`, `docker compose`, `openssl`, `bash`.
 *   **Kiến trúc mạng Docker (Được tạo tự động):**
     *   Tên mạng: `dockitt_network`
     *   Lớp mạng (Subnet): `10.0.0.0/24`
