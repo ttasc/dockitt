@@ -17,7 +17,7 @@
 
 ---
 
-# Manual Setup
+# Documentation (`vi`)
 
 **Các thành phần cốt lõi bao gồm:**
 *   **Hạ tầng mạng & Điều hướng:** Cụm DNS nội bộ (DNSMasq) và Reverse Proxy (Nginx Proxy Manager).
